@@ -25,31 +25,39 @@ Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(NULL)
     }
 }
 
- int Matrix::toIndex(int r, int c){
+int Matrix::toIndex(int r, int c) const
+{
     return r * col + c;
  }
  
-int Matrix::getRow()
+int Matrix::getRow() const
 {
     return row;
 }
 
-int Matrix::getCol()
+int Matrix::getCol() const
 {
     return col;
 }
 
-void Matrix::printMatrix()
-{
-    for(int i = 0; i < row; ++i)
+ostream& operator<< (ostream& o, const Matrix& m){
+    for(int i = 0; i < m.row; ++i)
     {
-        for(int j = 0; j < col; ++j)
+        for(int j = 0; j < m.col; ++j)
         {
-            cout << arr[toIndex(i, j)] << " ";
+            o << m.arr[m.toIndex(i, j)] << " ";
         }
-        cout << endl;
+        o << endl;
     }
+
+    return o;
 }
+
+void Matrix::printMatrix() const
+{
+    cout << *this;
+}
+
 void Matrix::scalarMultiply()
 {
     return;
