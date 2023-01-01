@@ -28,6 +28,16 @@ Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(NULL)
  int Matrix::toIndex(int r, int c){
     return r * col + c;
  }
+ 
+int Matrix::getRow()
+{
+    return row;
+}
+
+int Matrix::getCol()
+{
+    return col;
+}
 
 void Matrix::printMatrix()
 {

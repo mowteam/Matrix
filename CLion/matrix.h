@@ -11,6 +11,8 @@ private:
 public:
     Matrix(int row, int col);
     int toIndex(int row, int col);
+    int getRow();
+    int getCol();
     void printMatrix();
     void scalarMultiply();
 };
