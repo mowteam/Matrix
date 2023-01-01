@@ -2,11 +2,15 @@
 // Created by Will Rosenberg on 1/1/23.
 //
 
-class Matrix{
+class Matrix
+{
 private:
-    unsigned int row;
-    unsigned int col;
+    int row;
+    int col;
+    double *arr;
 public:
-    Matrix(unsigned int row, unsigned int col);
+    Matrix(int row, int col);
+    int toIndex(int row, int col);
+    void printMatrix();
     void scalarMultiply();
 };
