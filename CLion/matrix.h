@@ -16,6 +16,8 @@ public:
     int toIndex(int row, int col) const;
     int getRow() const;
     int getCol() const;
+    double * getArr() const;
+    Matrix add(Matrix m) const;
     void printMatrix() const;
     void scalarMultiply();
 };

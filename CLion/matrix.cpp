@@ -48,6 +48,29 @@ int Matrix::getCol() const
     return col;
 }
 
+double * Matrix::getArr() const
+{
+    return arr; 
+}
+
+Matrix Matrix::add(Matrix m) const
+{
+    if ( row == m.getRow() && col == m.getCol() ) 
+    {
+        Matrix n = m;
+        int len = sizeof(arr)/sizeof(arr[0]);
+        for (int i = 0; i < len; ++i)
+        {
+            n.getArr()[i] += arr[i];
+        }
+        return n;
+    }
+    else
+    {
+        //Throw an exception    
+    }
+}
+
 ostream& operator<< (ostream& o, const Matrix& m){
     for(int i = 0; i < m.row; ++i)
     {
@@ -60,6 +83,7 @@ ostream& operator<< (ostream& o, const Matrix& m){
 
     return o;
 }
+
 
 void Matrix::printMatrix() const
 {
