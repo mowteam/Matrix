@@ -36,7 +36,12 @@ Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(NULL)
 int Matrix::toIndex(int r, int c) const
 {
     return r * col + c;
- }
+}
+
+int Matrix::getSize() const 
+{
+    return getRow() * getCol();
+}
  
 int Matrix::getRow() const
 {
@@ -53,13 +58,12 @@ double * Matrix::getArr() const
     return arr; 
 }
 
-Matrix Matrix::add(Matrix m) const
+Matrix Matrix::add(Matrix &m) const
 {
     if ( row == m.getRow() && col == m.getCol() ) 
     {
         Matrix n = m;
-        int len = sizeof(arr)/sizeof(arr[0]);
-        for (int i = 0; i < len; ++i)
+        for (int i = 0; i < getSize(); ++i)
         {
             n.getArr()[i] += arr[i];
         }
@@ -67,7 +71,15 @@ Matrix Matrix::add(Matrix m) const
     }
     else
     {
-        //Throw an exception    
+        throw invalid_argument("invalid dimensions for addition operation");
+    }
+}
+
+Matrix Matrix::multiply(Matrix &m) const 
+{
+    if (col == m.getRow()) 
+    {
+        //Make a new matrix with the rows of the first and cols of the second 
     }
 }
 
@@ -83,7 +95,6 @@ ostream& operator<< (ostream& o, const Matrix& m){
 
     return o;
 }
-
 
 void Matrix::printMatrix() const
 {

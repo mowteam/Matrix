@@ -14,10 +14,12 @@ private:
 public:
     Matrix(int row, int col);
     int toIndex(int row, int col) const;
+    int getSize() const;
     int getRow() const;
     int getCol() const;
     double * getArr() const;
-    Matrix add(Matrix m) const;
+    Matrix add(Matrix &m) const;
+    Matrix multiply(Matrix &m) const;
     void printMatrix() const;
     void scalarMultiply();
 };
