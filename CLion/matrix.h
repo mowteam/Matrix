@@ -19,6 +19,7 @@ public:
     int getCol() const;
     double * getArr() const;
     Matrix add(Matrix &m) const;
+    Matrix operator+(Matrix &m) const;
     Matrix multiply(Matrix &m) const;
     void printMatrix() const;
     void scalarMultiply();

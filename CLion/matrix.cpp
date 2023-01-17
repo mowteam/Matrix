@@ -75,13 +75,18 @@ Matrix Matrix::add(Matrix &m) const
     }
 }
 
-Matrix Matrix::multiply(Matrix &m) const 
+Matrix Matrix::operator+(Matrix &m) const 
 {
-    if (col == m.getRow()) 
-    {
-        //Make a new matrix with the rows of the first and cols of the second 
-    }
+    return add(m);
 }
+
+// Matrix Matrix::multiply(Matrix &m) const 
+// {
+//     if (col == m.getRow()) 
+//     {
+//         //Make a new matrix with the rows of the first and cols of the second 
+//     }
+// }
 
 ostream& operator<< (ostream& o, const Matrix& m){
     for(int i = 0; i < m.row; ++i)
