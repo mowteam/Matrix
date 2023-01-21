@@ -33,6 +33,28 @@ Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(NULL)
     }
 }
 
+Matrix(const Matrix & m):({
+
+}
+
+Matrix(const Matrix && m):{
+
+}
+
+
+operator=(const Matrix & m){
+
+}
+
+operator=(const Matrix && m){
+
+}
+
+~Matrix(){
+    delete[] arr;
+}
+
+
 int Matrix::toIndex(int r, int c) const
 {
     return r * col + c;
@@ -58,7 +80,8 @@ double * Matrix::getArr() const
     return arr; 
 }
 
-Matrix Matrix::add(Matrix &m) const
+
+Matrix Matrix::operator+(Matrix &m) const 
 {
     if ( row == m.getRow() && col == m.getCol() ) 
     {
@@ -73,11 +96,6 @@ Matrix Matrix::add(Matrix &m) const
     {
         throw invalid_argument("invalid dimensions for addition operation");
     }
-}
-
-Matrix Matrix::operator+(Matrix &m) const 
-{
-    return add(m);
 }
 
 // Matrix Matrix::multiply(Matrix &m) const 

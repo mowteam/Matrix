@@ -13,12 +13,16 @@ private:
     double *arr;
 public:
     Matrix(int row, int col);
+    Matrix(const Matrix & m); //copy constructor
+    Matrix(const Matrix && m); //move constructor
+    Matrix & operator=(const Matrix & m); //copy assignment operator
+    Matrix & operator=(const Matrix && m); //move assignment operator
+    ~Matrix();
     int toIndex(int row, int col) const;
     int getSize() const;
     int getRow() const;
     int getCol() const;
     double * getArr() const;
-    Matrix add(Matrix &m) const;
     Matrix operator+(Matrix &m) const;
     Matrix multiply(Matrix &m) const;
     void printMatrix() const;
