@@ -8,32 +8,25 @@
 #include <sstream>
 using namespace std;
 
-Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(NULL) 
+Matrix::Matrix(int row1, int col1): row(row1), col(col1), arr(nullptr)
 {
-    string line;
-    stringstream iss;
-
     arr = new double[row * col];
-    for (int r = 0; r < row; r++) 
+    for (int i = 0; i < row * col; ++i)
     {
-        for (int c = 0; c < col; c++) 
-        {
-            double e;
-            do{
-                iss.clear();
-                line = "";
-                cout << "Element (" << r << ", " << c << "): ";
-                getline(cin, line); 
-                iss << line;
-            }
-            while(!(iss >> e));
-
-            arr[toIndex(r, c)] = e;
-        }
+		arr[i] = 0;
     }
 }
 
-Matrix::Matrix(const Matrix & m):row(m.row), col(m.col), arr(NULL){
+Matrix::Matrix(int row1, int col1, double * inputArr): row(row1), col(col1), arr(nullptr)
+{
+    arr = new double[row * col];
+    for (int i = 0; i < row * col; ++i)
+    {
+		arr[i] = inputArr[i];
+    }
+}
+
+Matrix::Matrix(const Matrix & m):row(m.row), col(m.col), arr(nullptr){
     arr = new double[row * col];
     for(int i = 0; i < row * col; ++i){
         arr[i] = m.arr[i];
@@ -41,7 +34,7 @@ Matrix::Matrix(const Matrix & m):row(m.row), col(m.col), arr(NULL){
 }
 
 Matrix::Matrix(Matrix && m):row(m.row), col(m.col), arr(m.arr){
-    m.arr = NULL;
+    m.arr = nullptr;
     m.row = 0;
     m.col = 0;
 }
@@ -66,7 +59,7 @@ Matrix & Matrix::operator=(Matrix && m){
 
         m.row = 0;
         m.col = 0;
-        m.arr = NULL;
+        m.arr = nullptr;
     }
 
     return *this;
@@ -74,6 +67,34 @@ Matrix & Matrix::operator=(Matrix && m){
 
 Matrix::~Matrix(){
     delete[] arr;
+}
+
+
+
+Matrix Matrix::createMatrix(int row, int col){
+	Matrix m = Matrix(row, col);
+	string line;
+	stringstream iss;
+
+	for (int r = 0; r < row; r++)
+	{
+		for (int c = 0; c < col; c++)
+		{
+			double e;
+			do{
+				iss.clear();
+				line = "";
+				cout << "Element (" << r << ", " << c << "): ";
+				getline(cin, line);
+				iss << line;
+			}
+			while(!(iss >> e));
+
+			m.arr[m.toIndex(r, c)] = e;
+		}
+	}
+
+	return m;
 }
 
 
@@ -102,6 +123,10 @@ double * Matrix::getArr() const
     return arr; 
 }
 
+void Matrix::blockMultiply(int row, int col, int block_num){
+
+}
+
 
 //matrix addition
 Matrix Matrix::operator+(Matrix &m) const 
@@ -121,7 +146,7 @@ Matrix Matrix::operator+(Matrix &m) const
     }
 }
 
-//matrix multiplication
+//matrix multiplication (cache efficient)
 Matrix Matrix::operator*(Matrix &m) const 
 {
     if(col != m.getRow()){
@@ -129,26 +154,45 @@ Matrix Matrix::operator*(Matrix &m) const
     }
 
     //create returned matrix
-    Matrix n = m;
+    int new_row = row;
+    int new_col = m.getCol();
+    Matrix n = Matrix(new_row, new_col);
 
+    //perform block multiplication
     //iterate blocks within n
-    for(int b_row = 0; b_row < row / BLOCK_SIZE; ++b_row){
-        for(int b_col = 0; b_col < col / BLOCK_SIZE; ++b_col){
+    for(int b_row = 0; b_row < new_row / BLOCK_SIZE; ++b_row){
+        for(int b_col = 0; b_col < new_col / BLOCK_SIZE; ++b_col){
 
-            //iterate within blocks of n
-            for(int r = 0; r < BLOCK_SIZE; ++r){
-                for(int c = 0; c < BLOCK_SIZE; ++c){
+        	for(int k = 0; k < col / BLOCK_SIZE; ++k){
+        		blockMultiply(b_row, b_col, k, n);
+        	}
 
-                    n.getArr()[b_row * BLOCK_SIZE + r][b_col * BLOCK_SIZE + c] = 0;
-
-                    //iterate col to perform dot product
-                    for(int k = 0; k < BLOCK_SIZE ++k){
-                        n.getArr()[b_row * BLOCK_SIZE + r][b_col * BLOCK_SIZE + c] += arr[b_row * BLOCK_SIZE + r][b_row * BLOCK_SIZE + k] * m.getArr()[b_row * BLOCK_SIZE + k][b_col * BLOCK_SIZE + c];
-                    }
-
-                }
-            }
         }
+    }
+
+    //account for elements not in a block
+
+    return n;
+}
+
+Matrix Matrix::inefficientMatrixMult(Matrix &m) const
+{
+	if(col != m.getRow()){
+		throw invalid_argument("invalid dimensions for multiplication operation");
+	}
+
+    //create returned matrix
+    int new_row = row;
+    int new_col = m.getCol();
+    Matrix n = Matrix(new_row, new_col);
+
+    for(int i = 0; i < new_row; ++i){
+    	for(int j = 0; j < new_col; ++j){
+
+    		for(int k = 0; k < col; ++k){
+    			n.getArr()[toIndex(i, j)] += arr[toIndex(i, k)] * m.getArr()[toIndex(k, j)];
+    		}
+    	}
     }
 
     return n;

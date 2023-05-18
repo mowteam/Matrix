@@ -4,12 +4,12 @@
 
 #include <iostream>
 
-BLOCK_SIZE = 8; //size for block matrix operations
-
 class Matrix
 {
     friend std::ostream& operator<< (std::ostream& o, const Matrix& m);
     friend Matrix operator* (int a, const Matrix& m);
+
+    static const int BLOCK_SIZE = 8; //size for block matrix operations
 private:
     int row;
     int col;
@@ -18,6 +18,7 @@ private:
 public:
     //constructors
     Matrix(int row, int col);
+    Matrix(int row1, int col1, double * inputArr);
     Matrix(const Matrix & m); //copy constructor
     Matrix(Matrix && m); //move constructor
     Matrix & operator=(const Matrix & m); //copy assignment operator
@@ -25,16 +26,20 @@ public:
     ~Matrix();
 
     //helper methods
+    static Matrix createMatrix(int row, int col);
     int toIndex(int row, int col) const;
     int getSize() const;
     int getRow() const;
     int getCol() const;
     double * getArr() const;
+    void blockMultiply(int row, int col, int block_num) //result stored in the calling matrix
 
     //matrix operations
     Matrix operator+(Matrix &m) const;
     Matrix operator*(Matrix &m) const; //matrix mult
+    Matrix inefficientMatrixMult(Matrix &m) const; //inefficient matrix mult for testing purposes
     Matrix operator*(double a) const;
+
     //Matrix transpose(Matrix &m) const;
     //double determinant(Matrix &m) const;
     void printMatrix() const;
