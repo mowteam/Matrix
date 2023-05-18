@@ -32,7 +32,8 @@ public:
     int getRow() const;
     int getCol() const;
     double * getArr() const;
-    void blockMultiply(int row, int col, int block_num) //result stored in the calling matrix
+    bool operator==(Matrix &m) const;
+    bool operator!=(Matrix &m) const;
 
     //matrix operations
     Matrix operator+(Matrix &m) const;
