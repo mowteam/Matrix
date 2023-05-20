@@ -156,7 +156,9 @@ Matrix Matrix::operator+(Matrix &m) const
     }
     else
     {
-        throw invalid_argument("invalid dimensions for addition operation");
+        cout << "invalid dimensions for addition operation" << endl;
+        Matrix nullMatrix = Matrix(m.row, m.col);
+        return nullMatrix;
     }
 }
 
