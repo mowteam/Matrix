@@ -224,7 +224,7 @@ Matrix Matrix::operator+(Matrix &m) const
 ////	}
 //
 //    return n;
-//}
+///}
 
 Matrix Matrix::inefficientMatrixMult(Matrix &m) const
 {
