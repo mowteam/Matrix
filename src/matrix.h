@@ -34,6 +34,9 @@ public:
     double * getArr() const;
     bool operator==(Matrix &m) const;
     bool operator!=(Matrix &m) const;
+    int gcd(int a, int b);
+    int lcm(double a, double b);
+    void rrefHelper(Matrix A, double a, double b, int row_m, int row_n);
 
     //matrix operations
     Matrix operator+(Matrix &m) const;
@@ -41,6 +44,7 @@ public:
     Matrix inefficientMatrixMult(Matrix &m) const; //inefficient matrix mult for testing purposes
     Matrix operator*(double a) const;
 
+    Matrix rref();
     //Matrix transpose(Matrix &m) const;
     //double determinant(Matrix &m) const;
     void printMatrix() const;

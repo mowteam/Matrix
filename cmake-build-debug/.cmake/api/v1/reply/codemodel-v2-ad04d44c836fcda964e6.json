@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "RealMatrix::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-RealMatrix-Debug-16232c8e1d4432c5c985.json",
+					"jsonFile" : "target-RealMatrix-Debug-c7a22410a975c427d20b.json",
 					"name" : "RealMatrix",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/asankoh/CLionProjects/RealMatrix/cmake-build-debug",
-		"source" : "/Users/asankoh/CLionProjects/RealMatrix"
+		"build" : "/Users/asankoh/CLionProjects/Matrix/cmake-build-debug",
+		"source" : "/Users/asankoh/CLionProjects/Matrix"
 	},
 	"version" : 
 	{

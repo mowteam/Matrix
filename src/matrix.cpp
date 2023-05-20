@@ -123,7 +123,65 @@ double * Matrix::getArr() const
     return arr; 
 }
 
-bool Matrix::operator==(Matrix &m) const{
+int Matrix::gcd(int a, int b)
+{
+    if (a == 0)
+    {
+        return b;
+    }
+    return gcd (b % a, a);
+}
+
+int Matrix::lcm(double a, double b)
+{
+    return (a * b) / gcd(a, b);
+}
+
+void Matrix::rrefHelper(Matrix A, double a, double b, int row_m, int row_n)
+{
+    if (a <= 0 & b <= 0 || a >= 0 && b >= 0 )
+    {
+        for (int column = 0; column < A.getCol(); column++)
+        {
+            A.arr[A.getCol() * row_m + column] = A.arr[A.getCol() * row_m + column] - A.arr[A.getCol() * row_n + column];
+        }
+    }
+    else
+    {
+        for (int column = 0; column < A.getCol(); column++)
+        {
+            A.arr[A.getCol() * row_m + column] = A.arr[A.getCol() * row_m + column] + A.arr[A.getCol() * row_n + column];
+        }
+    }
+}
+
+Matrix Matrix::rref()
+{
+    for (int cols = 0; cols < this->getCol(); cols++)
+    {
+        for (int rows = cols + 1; cols < this->getRow(); rows++)
+        {
+            //Find the lcm, and then the multiplying factor of each row
+            double a = this->arr[this->getCol() * cols + cols]; //Note that the first row always matches the col
+            double b = this->arr[this->getCol() * rows + cols];
+            double lcm = this->lcm(a, b);
+            double multipleA = lcm / a;
+            double multipleB = lcm / b;
+
+            //Multiply each row so the leading elements are the same
+            for (int column = 0; column < this->getCol(); column++)
+            {
+                this->arr[this->getCol() * cols + column] = this->arr[this->getCol() * cols + column] * multipleA;
+                this->arr[this->getCol() * rows + column] = this->arr[this->getCol() * rows + column] * multipleB;
+            }
+            this->rrefHelper(*this, a, b, cols, rows);
+        }
+    }
+    return *this;
+}
+
+bool Matrix::operator==(Matrix &m) const
+{
 	if(row != m.row || col != m.col){
 		return false;
 	}
@@ -137,7 +195,8 @@ bool Matrix::operator==(Matrix &m) const{
 	return true;
 }
 
-bool Matrix::operator!=(Matrix &m) const{
+bool Matrix::operator!=(Matrix &m) const
+{
 	return !(*this == m);
 }
 
@@ -230,7 +289,8 @@ Matrix Matrix::operator+(Matrix &m) const
 
 Matrix Matrix::inefficientMatrixMult(Matrix &m) const
 {
-	if(col != m.row){
+	if(col != m.row)
+    {
 		throw invalid_argument("invalid dimensions for multiplication operation");
 	}
 
