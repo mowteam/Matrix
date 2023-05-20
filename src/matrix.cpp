@@ -161,70 +161,70 @@ Matrix Matrix::operator+(Matrix &m) const
 }
 
 //matrix multiplication (cache efficient)
-Matrix Matrix::operator*(Matrix &m) const 
-{
-    if(col != m.row){
-        throw invalid_argument("invalid dimensions for multiplication operation");
-    }
-
-    //create returned matrix
-    int new_row = row;
-    int new_col = m.col;
-    Matrix n = Matrix(new_row, new_col); //filled with zeros
-
-    //perform block multiplication
-    //iterate blocks within the new matrix
-    for(int b_row = 0; b_row <= new_row - BLOCK_SIZE; b_row+=BLOCK_SIZE){
-        for(int b_col = 0; b_col <= new_col - BLOCK_SIZE; b_col+=BLOCK_SIZE){
-        	//iterate the row/column of blocks that create the corresponding block in the new matrix
-        	for(int k = 0; k <= col - BLOCK_SIZE; k+=BLOCK_SIZE){
-
-        		//multiply blocks
-				for(int r = 0; r < BLOCK_SIZE; ++r){
-					for(int c = 0; c < BLOCK_SIZE; ++c){
-						for(int kk = 0; kk < BLOCK_SIZE; ++kk){
-							n.arr[n.toIndex(b_row + r, b_col + c)] += arr[toIndex(b_row + r, k + kk)] * m.arr[m.toIndex(k + kk, b_col + c)];
-						}
-					}
-				}
-
-        	}
-
-        }
-    }
-
-    //account for elements not in a block
-    //when rows are not in a block and columns are
-    for(int r = (new_row / BLOCK_SIZE) * BLOCK_SIZE; r < new_row; r++){
-		for(int b_col = 0; b_col <= new_col - BLOCK_SIZE; b_col+=BLOCK_SIZE){
-			//iterate the row/column of blocks that create the corresponding block in the new matrix
-			for(int k = 0; k <= col - BLOCK_SIZE; k+=BLOCK_SIZE){
-
-				//multiply blocks
-				for(int r = 0; r < BLOCK_SIZE; ++r){
-					for(int c = 0; c < BLOCK_SIZE; ++c){
-						for(int kk = 0; kk < BLOCK_SIZE; ++kk){
-							n.arr[n.toIndex(b_row + r, b_col + c)] += arr[toIndex(b_row + r, k + kk)] * m.arr[m.toIndex(k + kk, b_col + c)];
-						}
-					}
-				}
-
-			}
-
-		}
-	}
-//    if(b_row + BLOCK_SIZE > new_row || b_col + BLOCK_SIZE > new_col){
-//		for(int r = b_row; r < new_row; ++r){
-//			for(int c = b_col; c < new_col; ++c){
-//				for(int kk = k; kk < col; ++kk){
-//					n.arr[n.toIndex(r, c)] += arr[toIndex(r, kk)] * m.arr[m.toIndex(kk, c)];
+//Matrix Matrix::operator*(Matrix &m) const
+//{
+//    if(col != m.row){
+//        throw invalid_argument("invalid dimensions for multiplication operation");
+//    }
+//
+//    //create returned matrix
+//    int new_row = row;
+//    int new_col = m.col;
+//    Matrix n = Matrix(new_row, new_col); //filled with zeros
+//
+//    //perform block multiplication
+//    //iterate blocks within the new matrix
+//    for(int b_row = 0; b_row <= new_row - BLOCK_SIZE; b_row+=BLOCK_SIZE){
+//        for(int b_col = 0; b_col <= new_col - BLOCK_SIZE; b_col+=BLOCK_SIZE){
+//        	//iterate the row/column of blocks that create the corresponding block in the new matrix
+//        	for(int k = 0; k <= col - BLOCK_SIZE; k+=BLOCK_SIZE){
+//
+//        		//multiply blocks
+//				for(int r = 0; r < BLOCK_SIZE; ++r){
+//					for(int c = 0; c < BLOCK_SIZE; ++c){
+//						for(int kk = 0; kk < BLOCK_SIZE; ++kk){
+//							n.arr[n.toIndex(b_row + r, b_col + c)] += arr[toIndex(b_row + r, k + kk)] * m.arr[m.toIndex(k + kk, b_col + c)];
+//						}
+//					}
 //				}
+//
+//        	}
+//
+//        }
+//    }
+//
+//    //account for elements not in a block
+//    //when rows are not in a block and columns are
+//    for(int r = (new_row / BLOCK_SIZE) * BLOCK_SIZE; r < new_row; r++){
+//		for(int b_col = 0; b_col <= new_col - BLOCK_SIZE; b_col+=BLOCK_SIZE){
+//			//iterate the row/column of blocks that create the corresponding block in the new matrix
+//			for(int k = 0; k <= col - BLOCK_SIZE; k+=BLOCK_SIZE){
+//
+//				//multiply blocks
+//				for(int r = 0; r < BLOCK_SIZE; ++r){
+//					for(int c = 0; c < BLOCK_SIZE; ++c){
+//						for(int kk = 0; kk < BLOCK_SIZE; ++kk){
+//							n.arr[n.toIndex(b_row + r, b_col + c)] += arr[toIndex(b_row + r, k + kk)] * m.arr[m.toIndex(k + kk, b_col + c)];
+//						}
+//					}
+//				}
+//
 //			}
+//
 //		}
 //	}
-
-    return n;
-}
+////    if(b_row + BLOCK_SIZE > new_row || b_col + BLOCK_SIZE > new_col){
+////		for(int r = b_row; r < new_row; ++r){
+////			for(int c = b_col; c < new_col; ++c){
+////				for(int kk = k; kk < col; ++kk){
+////					n.arr[n.toIndex(r, c)] += arr[toIndex(r, kk)] * m.arr[m.toIndex(kk, c)];
+////				}
+////			}
+////		}
+////	}
+//
+//    return n;
+//}
 
 Matrix Matrix::inefficientMatrixMult(Matrix &m) const
 {
