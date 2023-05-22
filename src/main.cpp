@@ -92,7 +92,9 @@ int main()
     cout << lineBreak << endl;
 
     //Checking the rref function
-    test2.rref().printMatrix();
+
+    Matrix m = test2.rref();
+    m.printMatrix();
 
     return 0;
 }
