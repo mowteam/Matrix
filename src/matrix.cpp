@@ -157,27 +157,28 @@ void Matrix::rrefHelper(Matrix A, double a, double b, int row_m, int row_n)
 
 Matrix Matrix::rref()
 {
-    for (int cols = 0; cols < this->getCol(); cols++)
+    Matrix copy = *this;
+    for (int cols = 0; cols < copy.getCol(); cols++)
     {
-        for (int rows = cols + 1; cols < this->getRow(); rows++)
+        for (int rows = cols + 1; cols < copy.getRow(); rows++)
         {
             //Find the lcm, and then the multiplying factor of each row
-            double a = this->arr[this->getCol() * cols + cols]; //Note that the first row always matches the col
-            double b = this->arr[this->getCol() * rows + cols];
-            double lcm = this->lcm(a, b);
+            double a = copy.arr[copy.getCol() * cols + cols]; //Note that the first row always matches the col
+            double b = copy.arr[copy.getCol() * rows + cols];
+            double lcm = copy.lcm(a, b);
             double multipleA = lcm / a;
             double multipleB = lcm / b;
 
             //Multiply each row so the leading elements are the same
-            for (int column = 0; column < this->getCol(); column++)
+            for (int column = 0; column < copy.getCol(); column++)
             {
-                this->arr[this->getCol() * cols + column] = this->arr[this->getCol() * cols + column] * multipleA;
-                this->arr[this->getCol() * rows + column] = this->arr[this->getCol() * rows + column] * multipleB;
+                copy.arr[copy.getCol() * cols + column] = copy.arr[copy.getCol() * cols + column] * multipleA;
+                copy.arr[copy.getCol() * rows + column] = copy.arr[copy.getCol() * rows + column] * multipleB;
             }
-            this->rrefHelper(*this, a, b, cols, rows);
+            copy.rrefHelper(copy, a, b, cols, rows);
         }
     }
-    return *this;
+    return copy;
 }
 
 bool Matrix::operator==(Matrix &m) const

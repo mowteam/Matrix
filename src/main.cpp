@@ -1,5 +1,5 @@
-#include <iostream>
 #include "matrix.h"
+#include <iostream>
 #include <stdlib.h>
 
 using namespace std;
@@ -11,7 +11,7 @@ void fillArray(double * arr, int size){
 }
 
 //bool testMatrixMult(){
-////	srand(time(nullptr));
+//	srand(time(nullptr));
 //	int count = 0;
 //	while(true){
 //		//determine dimensions
