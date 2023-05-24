@@ -36,7 +36,7 @@ public:
     bool operator!=(Matrix &m) const;
     int gcd(int a, int b);
     int lcm(double a, double b);
-    static void rrefHelper(Matrix & A, double a, double b, int row_m, int row_n);
+    static void rrefHelper(Matrix & A, int row_m, int row_n);
 
     //matrix operations
     Matrix operator+(Matrix &m) const;

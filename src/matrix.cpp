@@ -126,12 +126,8 @@ double * Matrix::getArr() const
 
 int Matrix::gcd(int a, int b)
 {
-    cout << "GCD" << endl;
-    cout << "a: " << a << endl;
-    cout << "b: " << b << endl;
     if (b == 0)
     {
-        cout << "if statement" << endl;
         return a;
     }
         return gcd(b, a % b);
@@ -139,15 +135,14 @@ int Matrix::gcd(int a, int b)
 
 int Matrix::lcm(double a, double b)
 {
-    cout << "LCM" << endl;
     return (a * b) / gcd(a, b);
 }
 
-void Matrix::rrefHelper(Matrix & A, double a, double b, int row_m, int row_n)
+void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
 {
     for (int column = 0; column < A.getCol(); column++)
     {
-        A.arr[A.getCol() * row_m + column] = A.arr[A.getCol() * row_m + column] - A.arr[A.getCol() * row_n + column];
+        A.arr[A.getCol() * row_n + column] = A.arr[A.getCol() * row_n + column] - A.arr[A.getCol() * row_m + column];
     }
 }
 
@@ -156,20 +151,31 @@ Matrix Matrix::rref()
     Matrix copy = *this;
     for (int cols = 0; cols < copy.getCol(); cols++)
     {
-        for (int rows = cols + 1; cols < copy.getRow(); rows++)
+        for (int rows = cols + 1; rows < copy.getRow(); rows++)
         {
-            //Find the lcm, and then the multiplying factor of each row
             int a = copy.arr[copy.getCol() * cols + cols]; //Note that the first row always matches the col
             int b = copy.arr[copy.getCol() * rows + cols];
             if ( a < 0 )
             {
                 a *= -1;
-                copy.arr[copy.getCol() * cols + cols] *= -1;
+                for (int i = 0; i < copy.getCol(); ++i)
+                {
+                    if (copy.arr[copy.getCol() * cols + i] != 0)
+                    {
+                        copy.arr[copy.getCol() * cols + i] *= -1;
+                    }
+                }
             }
             if ( b < 0 )
             {
                 b *= -1;
-                copy.arr[copy.getCol() * rows + cols] *= -1;
+                for (int i = 0; i < copy.getCol(); ++i)
+                {
+                    if (copy.arr[copy.getCol() * rows + i] != 0)
+                    {
+                        copy.arr[copy.getCol() * rows + i] *= -1;
+                    }
+                }
             }
             double lcm = copy.lcm(a, b);
             double multipleA = lcm / a;
@@ -181,7 +187,7 @@ Matrix Matrix::rref()
                 copy.arr[copy.getCol() * cols + column] *= multipleA;
                 copy.arr[copy.getCol() * rows + column] *= multipleB;
             }
-            copy.rrefHelper(copy, a, b, cols, rows);
+            copy.rrefHelper(copy, cols, rows);
         }
     }
     return copy;
@@ -198,7 +204,6 @@ bool Matrix::operator==(Matrix &m) const
 			return false;
 		}
 	}
-
 	return true;
 }
 

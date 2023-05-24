@@ -74,6 +74,8 @@ int main()
     double arr[4] = {-1, 4, 3, -2};
     Matrix test = Matrix(2, 2, arr);
 
+    cout << "Matrix 1: " << endl;
+
     test.printMatrix();
 
     cout << endl;
@@ -81,11 +83,15 @@ int main()
     double arr2[4] = {2, -1, -4, +4};
     Matrix test2 = Matrix(2, 2, arr2);
 
+    cout << "Matrix 2: " << endl;
+
     test2.printMatrix();
 
     cout << endl;
 
     Matrix test3 = test + test2;
+
+    cout << "Matrix 3: " << endl;
 
     test3.printMatrix();
 
@@ -93,8 +99,42 @@ int main()
 
     //Checking the rref function
 
+    cout << "Matrix 2: " << endl;
+    test2.printMatrix();
+
     Matrix m = test2.rref();
+
+    cout << "Row Reduced Form" << endl;
     m.printMatrix();
+    cout << endl;
+
+    cout << "Matrix 4: " << endl;
+
+    double arr4[9] = {6, 3, 2, -4, 9, 6, -1, 1, -2};
+    Matrix test4 = Matrix(3, 3, arr4);
+
+    test4.printMatrix();
+
+    Matrix n = test4.rref();
+
+    cout << "Row Reduced Form" << endl;
+
+    n.printMatrix();
+
+    cout << endl;
+
+    cout << "Matrix 5: " << endl;
+
+    double arr5[12] = {6, 3, 2, -4, 9, 6, -1, 1, -2, 0, 3, 1};
+    Matrix test5 = Matrix(3, 4, arr4);
+
+    test5.printMatrix();
+
+    Matrix p = test5.rref();
+
+    cout << "Row Reduced Form" << endl;
+
+    p.printMatrix();
 
     return 0;
 }
