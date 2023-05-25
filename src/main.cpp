@@ -136,6 +136,14 @@ int main()
 
     p.printMatrix();
 
+    cout << lineBreak << endl;
+
+    test4.printMatrix();
+
+    cout << "Row Reduced Form" << endl;
+
+    test4.rrefComplete().printMatrix();
+
     return 0;
 }
 

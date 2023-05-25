@@ -137,6 +137,12 @@ int Matrix::lcm(double a, double b)
     return (a * b) / gcd(a, b);
 }
 
+Matrix Matrix::rrefComplete()
+{
+    Matrix copy = this->rref();
+    //Reverse
+}
+
 Matrix Matrix::rref()
 {
     Matrix copy = *this;

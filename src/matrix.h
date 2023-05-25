@@ -46,6 +46,7 @@ public:
     Matrix operator*(double a) const;
 
     Matrix rref();
+    Matrix rrefComplete();
     //Matrix transpose(Matrix &m) const;
     //double determinant(Matrix &m) const;
     void printMatrix() const;
