@@ -140,7 +140,60 @@ int Matrix::lcm(double a, double b)
 Matrix Matrix::rrefComplete()
 {
     Matrix copy = this->rref();
-    //Reverse
+
+    for (int cols = copy.getCol() - 1; cols > -1; cols--)
+    {
+        for (int rows = cols - 1; rows > -1; rows--) //Can't be cols because sometimes getCol != getRow
+        {
+            int a = copy.arr[copy.getCol() * cols + cols]; //Note that the first row always matches the col
+            int b = copy.arr[copy.getCol() * rows + cols];
+            if ( a < 0 )
+            {
+                a *= -1;
+                for (int i = 0; i < copy.getCol(); ++i)
+                {
+                    if (copy.arr[copy.getCol() * cols + i] != 0)
+                    {
+                        copy.arr[copy.getCol() * cols + i] *= -1;
+                    }
+                }
+            }
+            if ( b < 0 )
+            {
+                b *= -1;
+                for (int i = 0; i < copy.getCol(); ++i)
+                {
+                    if (copy.arr[copy.getCol() * rows + i] != 0)
+                    {
+                        copy.arr[copy.getCol() * rows + i] *= -1;
+                    }
+                }
+            }
+            double lcm = copy.lcm(a, b);
+            double multipleA = lcm / a;
+            double multipleB = lcm / b;
+
+            //Multiply each row so the leading elements are the same
+            for (int column = 0; column < copy.getCol(); column++)
+            {
+                copy.arr[copy.getCol() * cols + column] *= multipleA;
+                copy.arr[copy.getCol() * rows + column] *= multipleB;
+            }
+            //Perform necessary row operations
+            copy.rrefHelper(copy, cols, rows);
+
+            //Divide each resulting row by their GCD
+            int rowGCDA = gcdRowOperation(copy, cols);
+            int rowGCDB = gcdRowOperation(copy, rows);
+
+            for (int column = 0; column < copy.getCol(); column++)
+            {
+                copy.arr[copy.getCol() * cols + column] /= rowGCDA;
+                copy.arr[copy.getCol() * rows + column] /= rowGCDB;
+            }
+        }
+    }
+    return copy;
 }
 
 Matrix Matrix::rref()
@@ -196,7 +249,6 @@ Matrix Matrix::rref()
                 copy.arr[copy.getCol() * cols + column] /= rowGCDA;
                 copy.arr[copy.getCol() * rows + column] /= rowGCDB;
             }
-            //Repeat the process but go up from the bottom right now
         }
     }
     return copy;

@@ -140,9 +140,17 @@ int main()
 
     test4.printMatrix();
 
-    cout << "Row Reduced Form" << endl;
+    cout << "Complete Row Reduced Form" << endl;
 
     test4.rrefComplete().printMatrix();
+
+    cout << endl;
+
+    test5.printMatrix();
+
+    cout << "Complete Row Reduced Form" << endl;
+
+    test5.rrefComplete().printMatrix();
 
     return 0;
 }
