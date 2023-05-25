@@ -37,6 +37,7 @@ public:
     int gcd(int a, int b);
     int lcm(double a, double b);
     static void rrefHelper(Matrix & A, int row_m, int row_n);
+    int gcdRowOperation(const Matrix A, int row);
 
     //matrix operations
     Matrix operator+(Matrix &m) const;

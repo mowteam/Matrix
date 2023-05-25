@@ -3,7 +3,6 @@
 //
 
 #include "matrix.h"
-#include <numeric>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -138,14 +137,6 @@ int Matrix::lcm(double a, double b)
     return (a * b) / gcd(a, b);
 }
 
-void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
-{
-    for (int column = 0; column < A.getCol(); column++)
-    {
-        A.arr[A.getCol() * row_n + column] = A.arr[A.getCol() * row_n + column] - A.arr[A.getCol() * row_m + column];
-    }
-}
-
 Matrix Matrix::rref()
 {
     Matrix copy = *this;
@@ -187,19 +178,56 @@ Matrix Matrix::rref()
                 copy.arr[copy.getCol() * cols + column] *= multipleA;
                 copy.arr[copy.getCol() * rows + column] *= multipleB;
             }
+            //Perform necessary row operations
             copy.rrefHelper(copy, cols, rows);
+
+            //Divide each resulting row by their GCD
+            int rowGCDA = gcdRowOperation(copy, cols);
+            int rowGCDB = gcdRowOperation(copy, rows);
+
+            for (int column = 0; column < copy.getCol(); column++)
+            {
+                copy.arr[copy.getCol() * cols + column] /= rowGCDA;
+                copy.arr[copy.getCol() * rows + column] /= rowGCDB;
+            }
+            //Repeat the process but go up from the bottom right now
         }
     }
     return copy;
 }
 
+void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
+{
+    for (int column = 0; column < A.getCol(); column++)
+    {
+        int difference = A.arr[A.getCol() * row_n + column] - A.arr[A.getCol() * row_m + column];
+        if (difference == -0)
+        {
+            difference = 0;
+        }
+        A.arr[A.getCol() * row_n + column] = difference;
+    }
+}
+
+int Matrix::gcdRowOperation(const Matrix A, int row)
+{
+    int result = A.arr[A.getCol() * row + 0];
+    for (int i = 1; i < A.getCol(); ++i)
+    {
+        result = gcd(abs(A.arr[A.getCol() * row + i]), result);
+    }
+    return result;
+}
+
 bool Matrix::operator==(Matrix &m) const
 {
-	if(row != m.row || col != m.col){
+	if(row != m.row || col != m.col)
+    {
 		return false;
 	}
 
-	for(int i = 0; i < getSize(); ++i){
+	for(int i = 0; i < getSize(); ++i)
+    {
 		if(arr[i] != m.arr[i]){
 			return false;
 		}
