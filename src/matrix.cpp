@@ -3,6 +3,7 @@
 //
 
 #include "matrix.h"
+#include "math.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -143,9 +144,9 @@ Matrix Matrix::rrefComplete()
 
     for (int cols = copy.getCol() - 1; cols > -1; cols--)
     {
-        for (int rows = cols - 1; rows > -1; rows--) //Can't be cols because sometimes getCol != getRow
+        for (int rows = cols - 1; rows > -1; rows--) //Need to fix this, different when starting at the bottom right of a m != n matrix
         {
-            int a = copy.arr[copy.getCol() * cols + cols]; //Note that the first row always matches the col
+            int a = copy.arr[copy.getCol() * cols + cols]; //Change this
             int b = copy.arr[copy.getCol() * rows + cols];
             if ( a < 0 )
             {
@@ -275,6 +276,48 @@ int Matrix::gcdRowOperation(const Matrix A, int row)
         result = gcd(abs(A.arr[A.getCol() * row + i]), result);
     }
     return result;
+}
+
+double Matrix::determinant(Matrix &m) const
+{
+    if ( m.getRow() != m.getRow() )
+    {
+        cout << "Determinant is undefined";
+        return -1;//Change this to some null value
+    }
+    else
+    {
+        return detHelper(m, 0);
+    }
+}
+
+double Matrix::detHelper(Matrix &m, double determinant) const
+{
+    if (m.getRow() == 2)
+    {
+        return (m.arr[2 * 0 + 0] * m.arr[2 * 1 + 1] ) - (m.arr[2 * 0 + 1] * m.arr[2 * 1 + 0]);
+    }
+    else
+    {
+        for (int i = 0; i < m.getCol(); ++i)
+        {
+            double arr[m.getRow() - 1 * m.getCol() - 1];
+            int arrIndex = 0;
+            for (int row = 0; row < m.getRow(); row++)
+            {
+                for (int col = 0; col < m.getCol(); col++)
+                {
+                    if (row != 0 || col != i) //We are always choosing the first row to iterate across for the determinant
+                    {
+                        arr[arrIndex] = m.arr[toIndex(row, col)];
+                        arrIndex++;
+                    }
+                }
+            }
+            Matrix n = Matrix(m.getRow() - 1, m.getCol() - 1, arr);
+            determinant += pow(-1, i) * detHelper(n, determinant);
+        }
+    }
 }
 
 bool Matrix::operator==(Matrix &m) const
