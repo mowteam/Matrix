@@ -150,7 +150,7 @@ int main()
 
     cout << "Complete Row Reduced Form" << endl;
 
-    //test5.rrefComplete().printMatrix(); Causing problems (something with non-square matrices)
+    test5.rrefComplete().printMatrix(); //Causing problems (something with non-square matrices)
 
     cout << lineBreak << endl;
 

@@ -144,18 +144,19 @@ Matrix Matrix::rrefComplete()
 
     for (int cols = copy.getCol() - 1; cols > -1; cols--)
     {
-        for (int rows = cols - 1; rows > -1; rows--) //Need to fix this, different when starting at the bottom right of a m != n matrix
+        int startingRow = copy.getRow() - (copy.getCol() - cols);
+        for (int rows = startingRow - 1; rows > -1; rows--) //Need to fix this, different when starting at the bottom right of a m != n matrix
         {
-            int a = copy.arr[copy.getCol() * cols + cols]; //Change this
+            int a = copy.arr[copy.getCol() * startingRow + cols]; //Change this
             int b = copy.arr[copy.getCol() * rows + cols];
             if ( a < 0 )
             {
                 a *= -1;
                 for (int i = 0; i < copy.getCol(); ++i)
                 {
-                    if (copy.arr[copy.getCol() * cols + i] != 0)
+                    if (copy.arr[copy.getCol() * startingRow + i] != 0)
                     {
-                        copy.arr[copy.getCol() * cols + i] *= -1;
+                        copy.arr[copy.getCol() * startingRow + i] *= -1;
                     }
                 }
             }
@@ -177,19 +178,19 @@ Matrix Matrix::rrefComplete()
             //Multiply each row so the leading elements are the same
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * cols + column] *= multipleA;
+                copy.arr[copy.getCol() * startingRow + column] *= multipleA;
                 copy.arr[copy.getCol() * rows + column] *= multipleB;
             }
             //Perform necessary row operations
             copy.rrefHelper(copy, cols, rows);
 
             //Divide each resulting row by their GCD
-            int rowGCDA = gcdRowOperation(copy, cols);
+            int rowGCDA = gcdRowOperation(copy, startingRow);
             int rowGCDB = gcdRowOperation(copy, rows);
 
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * cols + column] /= rowGCDA;
+                copy.arr[copy.getCol() * startingRow + column] /= rowGCDA;
                 copy.arr[copy.getCol() * rows + column] /= rowGCDB;
             }
         }
