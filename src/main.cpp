@@ -150,7 +150,7 @@ int main()
 
     cout << "Complete Row Reduced Form" << endl;
 
-    test5.rrefComplete().printMatrix(); //Causing problems (something with non-square matrices)
+    test5.rrefComplete().printMatrix();
 
     cout << lineBreak << endl;
 
@@ -159,7 +159,7 @@ int main()
 
     cout << "determinant: " << endl;
 
-    cout << test4.determinant(test4) << endl;
+    cout << test4.determinant(test4) << endl; //Causing some memory issues
 
     return 0;
 }

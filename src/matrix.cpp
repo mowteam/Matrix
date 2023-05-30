@@ -138,7 +138,7 @@ int Matrix::lcm(double a, double b)
     return (a * b) / gcd(a, b);
 }
 
-Matrix Matrix::rrefComplete()
+Matrix Matrix::rrefComplete() //Reduces the matrix to its most simple row equivalent form
 {
     Matrix copy = this->rref();
 
@@ -147,16 +147,16 @@ Matrix Matrix::rrefComplete()
         int startingRow = copy.getRow() - (copy.getCol() - cols);
         for (int rows = startingRow - 1; rows > -1; rows--) //Need to fix this, different when starting at the bottom right of a m != n matrix
         {
-            int a = copy.arr[copy.getCol() * startingRow + cols]; //Change this
-            int b = copy.arr[copy.getCol() * rows + cols];
+            int a = copy.arr[copy.toIndex(startingRow, cols)]; //Change this
+            int b = copy.arr[copy.toIndex(rows, cols)];
             if ( a < 0 )
             {
                 a *= -1;
                 for (int i = 0; i < copy.getCol(); ++i)
                 {
-                    if (copy.arr[copy.getCol() * startingRow + i] != 0)
+                    if (copy.arr[copy.toIndex(startingRow, i)] != 0)
                     {
-                        copy.arr[copy.getCol() * startingRow + i] *= -1;
+                        copy.arr[copy.toIndex(startingRow, i)] *= -1;
                     }
                 }
             }
@@ -165,9 +165,9 @@ Matrix Matrix::rrefComplete()
                 b *= -1;
                 for (int i = 0; i < copy.getCol(); ++i)
                 {
-                    if (copy.arr[copy.getCol() * rows + i] != 0)
+                    if (copy.arr[copy.toIndex(rows, i)] != 0)
                     {
-                        copy.arr[copy.getCol() * rows + i] *= -1;
+                        copy.arr[copy.toIndex(rows, i)] *= -1;
                     }
                 }
             }
@@ -178,11 +178,11 @@ Matrix Matrix::rrefComplete()
             //Multiply each row so the leading elements are the same
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * startingRow + column] *= multipleA;
-                copy.arr[copy.getCol() * rows + column] *= multipleB;
+                copy.arr[copy.toIndex(startingRow, column)] *= multipleA;
+                copy.arr[copy.toIndex(rows, column)] *= multipleB;
             }
             //Perform necessary row operations
-            copy.rrefHelper(copy, cols, rows);
+            copy.rrefHelper(copy, startingRow, rows);
 
             //Divide each resulting row by their GCD
             int rowGCDA = gcdRowOperation(copy, startingRow);
@@ -190,31 +190,31 @@ Matrix Matrix::rrefComplete()
 
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * startingRow + column] /= rowGCDA;
-                copy.arr[copy.getCol() * rows + column] /= rowGCDB;
+                copy.arr[copy.toIndex(startingRow, column)] /= rowGCDA;
+                copy.arr[copy.toIndex(rows, column)] /= rowGCDB;
             }
         }
     }
     return copy;
 }
 
-Matrix Matrix::rref()
+Matrix Matrix::rref() //Reduces the matrix to an upper triangular row equivalent matrix
 {
     Matrix copy = *this;
     for (int cols = 0; cols < copy.getCol(); cols++)
     {
         for (int rows = cols + 1; rows < copy.getRow(); rows++)
         {
-            int a = copy.arr[copy.getCol() * cols + cols]; //Note that the first row always matches the col
-            int b = copy.arr[copy.getCol() * rows + cols];
+            int a = copy.arr[copy.toIndex(cols, cols)]; //Note that the first row always matches the col
+            int b = copy.arr[copy.toIndex(rows, cols)];
             if ( a < 0 )
             {
                 a *= -1;
                 for (int i = 0; i < copy.getCol(); ++i)
                 {
-                    if (copy.arr[copy.getCol() * cols + i] != 0)
+                    if (copy.arr[copy.toIndex(cols, i)] != 0)
                     {
-                        copy.arr[copy.getCol() * cols + i] *= -1;
+                        copy.arr[copy.toIndex(cols, i)] *= -1;
                     }
                 }
             }
@@ -223,9 +223,9 @@ Matrix Matrix::rref()
                 b *= -1;
                 for (int i = 0; i < copy.getCol(); ++i)
                 {
-                    if (copy.arr[copy.getCol() * rows + i] != 0)
+                    if (copy.arr[copy.toIndex(rows, i)] != 0)
                     {
-                        copy.arr[copy.getCol() * rows + i] *= -1;
+                        copy.arr[copy.toIndex(rows, i)] *= -1;
                     }
                 }
             }
@@ -236,8 +236,8 @@ Matrix Matrix::rref()
             //Multiply each row so the leading elements are the same
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * cols + column] *= multipleA;
-                copy.arr[copy.getCol() * rows + column] *= multipleB;
+                copy.arr[copy.toIndex(cols, column)] *= multipleA;
+                copy.arr[copy.toIndex(rows, column)] *= multipleB;
             }
             //Perform necessary row operations
             copy.rrefHelper(copy, cols, rows);
@@ -248,8 +248,8 @@ Matrix Matrix::rref()
 
             for (int column = 0; column < copy.getCol(); column++)
             {
-                copy.arr[copy.getCol() * cols + column] /= rowGCDA;
-                copy.arr[copy.getCol() * rows + column] /= rowGCDB;
+                copy.arr[copy.toIndex(cols, column)] /= rowGCDA;
+                copy.arr[copy.toIndex(rows, column)] /= rowGCDB;
             }
         }
     }
@@ -260,28 +260,28 @@ void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
 {
     for (int column = 0; column < A.getCol(); column++)
     {
-        int difference = A.arr[A.getCol() * row_n + column] - A.arr[A.getCol() * row_m + column];
+        int difference = A.arr[A.toIndex(row_n, column)] - A.arr[A.toIndex(row_m, column)];
         if (difference == -0)
         {
             difference = 0;
         }
-        A.arr[A.getCol() * row_n + column] = difference;
+        A.arr[A.toIndex(row_n, column)] = difference;
     }
 }
 
 int Matrix::gcdRowOperation(const Matrix A, int row)
 {
-    int result = A.arr[A.getCol() * row + 0];
+    int result = A.arr[A.toIndex(row, 0)];
     for (int i = 1; i < A.getCol(); ++i)
     {
-        result = gcd(abs(A.arr[A.getCol() * row + i]), result);
+        result = gcd(abs(A.arr[A.toIndex(row, i)]), result);
     }
     return result;
 }
 
 double Matrix::determinant(Matrix &m) const
 {
-    if ( m.getRow() != m.getRow() )
+    if ( m.getRow() != m.getCol() )
     {
         cout << "Determinant is undefined";
         return -1;//Change this to some null value
@@ -296,7 +296,7 @@ double Matrix::detHelper(Matrix &m, double determinant) const
 {
     if (m.getRow() == 2)
     {
-        return (m.arr[2 * 0 + 0] * m.arr[2 * 1 + 1] ) - (m.arr[2 * 0 + 1] * m.arr[2 * 1 + 0]);
+        return (m.arr[m.toIndex(0,0)] * m.arr[m.toIndex(1,1)] ) - (m.arr[m.toIndex(0,1)] * m.arr[m.toIndex(1,0)]);
     }
     else
     {
