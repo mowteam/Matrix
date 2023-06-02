@@ -159,9 +159,30 @@ int main()
 
     cout << "determinant: " << endl;
 
-    cout << test4.determinant(test4) << endl; //Causing some memory issues
+    //cout << test4.determinant() << endl;
+
+    double arr6[9] = {2, 1, 3, 4, 2, -3, 0, 2, -1};
+    Matrix test6 = Matrix(3, 3, arr6);
+
+    cout << "Matrix:" << endl;
+    test6.printMatrix();
+
+    cout << "determinant: " << endl;
+
+    //cout << test6.determinant() << endl;
+
+    double arr7[16] = {-3, 2, 1, 0, 9, 2, 1, 3,  8, 6, -4, 2, -4, -1, 8, 0};
+    Matrix test7 = Matrix(4, 4, arr7);
+
+    cout << "Matrix:" << endl;
+    test7.printMatrix();
+
+    cout << "determinant: " << endl;
+
+    cout << test7.determinant() << endl;
 
     return 0;
+
 }
 
 

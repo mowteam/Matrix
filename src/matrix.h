@@ -48,8 +48,8 @@ public:
     Matrix rref();
     Matrix rrefComplete();
     //Matrix transpose(Matrix &m) const;
-    double determinant(Matrix &m) const;
-    double detHelper(Matrix &m, double determinant) const;
+    double determinant() const;
+    double detHelper(Matrix m, double &determinant) const;
     void printMatrix() const;
 };
 

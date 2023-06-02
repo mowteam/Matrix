@@ -279,8 +279,9 @@ int Matrix::gcdRowOperation(const Matrix A, int row)
     return result;
 }
 
-double Matrix::determinant(Matrix &m) const
+double Matrix::determinant() const
 {
+    Matrix m = *this;
     if ( m.getRow() != m.getCol() )
     {
         cout << "Determinant is undefined";
@@ -288,11 +289,13 @@ double Matrix::determinant(Matrix &m) const
     }
     else
     {
-        return detHelper(m, 0);
+        double d = 0;
+        detHelper(m, d);
+        return d;
     }
 }
 
-double Matrix::detHelper(Matrix &m, double determinant) const
+double Matrix::detHelper(Matrix m, double &determinant) const
 {
     if (m.getRow() == 2)
     {
@@ -302,13 +305,13 @@ double Matrix::detHelper(Matrix &m, double determinant) const
     {
         for (int i = 0; i < m.getCol(); ++i)
         {
-            double arr[m.getRow() - 1 * m.getCol() - 1];
+            double arr[(m.getRow() - 1) * (m.getCol() - 1)];
             int arrIndex = 0;
             for (int row = 0; row < m.getRow(); row++)
             {
                 for (int col = 0; col < m.getCol(); col++)
                 {
-                    if (row != 0 || col != i) //We are always choosing the first row to iterate across for the determinant
+                    if (row != 0 && col != i) //We are always choosing the first row to iterate across for the determinant
                     {
                         arr[arrIndex] = m.arr[toIndex(row, col)];
                         arrIndex++;
@@ -316,7 +319,7 @@ double Matrix::detHelper(Matrix &m, double determinant) const
                 }
             }
             Matrix n = Matrix(m.getRow() - 1, m.getCol() - 1, arr);
-            determinant += pow(-1, i) * detHelper(n, determinant);
+            determinant += m.arr[i] * pow(-1, i) * detHelper(n, determinant);
         }
     }
 }
