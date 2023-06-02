@@ -305,7 +305,7 @@ double Matrix::detHelper(Matrix m, double &determinant) const
     {
         for (int i = 0; i < m.getCol(); ++i)
         {
-            double arr[(m.getRow() - 1) * (m.getCol() - 1)];
+            double * arr = new double[(m.getRow() - 1) * (m.getCol() - 1)];
             int arrIndex = 0;
             for (int row = 0; row < m.getRow(); row++)
             {
@@ -319,6 +319,7 @@ double Matrix::detHelper(Matrix m, double &determinant) const
                 }
             }
             Matrix n = Matrix(m.getRow() - 1, m.getCol() - 1, arr);
+            delete []arr;
             determinant += m.arr[i] * pow(-1, i) * detHelper(n, determinant);
         }
     }

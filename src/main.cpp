@@ -159,7 +159,7 @@ int main()
 
     cout << "determinant: " << endl;
 
-    //cout << test4.determinant() << endl;
+   //cout << test4.determinant() << endl;
 
     double arr6[9] = {2, 1, 3, 4, 2, -3, 0, 2, -1};
     Matrix test6 = Matrix(3, 3, arr6);
