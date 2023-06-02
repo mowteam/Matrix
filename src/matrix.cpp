@@ -6,6 +6,7 @@
 #include "math.h"
 #include <iostream>
 #include <string>
+#include <vector>
 #include <sstream>
 using namespace std;
 
@@ -289,14 +290,14 @@ double Matrix::determinant() const
     }
     else
     {
-        double d = 0;
-        detHelper(m, d);
-        return d;
+        return detHelper(m);
+
     }
 }
 
-double Matrix::detHelper(Matrix m, double &determinant) const
+double Matrix::detHelper(Matrix m) const
 {
+    double determinant = 0;
     if (m.getRow() == 2)
     {
         return (m.arr[m.toIndex(0,0)] * m.arr[m.toIndex(1,1)] ) - (m.arr[m.toIndex(0,1)] * m.arr[m.toIndex(1,0)]);
@@ -319,9 +320,10 @@ double Matrix::detHelper(Matrix m, double &determinant) const
                 }
             }
             Matrix n = Matrix(m.getRow() - 1, m.getCol() - 1, arr);
-            delete []arr;
-            determinant += m.arr[i] * pow(-1, i) * detHelper(n, determinant);
+            delete[] arr;
+            determinant += m.arr[i] * pow(-1, i) * n.detHelper(n);
         }
+        return determinant;
     }
 }
 
