@@ -37,6 +37,7 @@ public:
     int gcd(int a, int b);
     int lcm(double a, double b);
     static void rrefHelper(Matrix & A, int row_m, int row_n);
+    double detHelper(Matrix m) const;
     int gcdRowOperation(const Matrix A, int row);
 
     //matrix operations
@@ -49,7 +50,7 @@ public:
     Matrix rrefComplete();
     //Matrix transpose(Matrix &m) const;
     double determinant() const;
-    double detHelper(Matrix m) const;
+    Matrix inverse() const;
     void printMatrix() const;
 };
 

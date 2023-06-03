@@ -326,6 +326,47 @@ double Matrix::detHelper(Matrix m) const
         return determinant;
     }
 }
+Matrix Matrix::inverse() const
+{
+    Matrix m = Matrix(this->row, this->col);
+    if (this->determinant() == 0)
+    {
+        cout << "Inverse is undefined." << endl;
+        return m;
+    }
+    else
+    {
+        double determinant = this->determinant();
+
+        //Constructing the adjunct matrix
+        for (int i = 0; i < this->getRow(); ++i)
+        {
+            for (int j = 0; j < this->getCol(); ++j)
+            {
+                double *arr = new double[(this->getRow() - 1) * (this->getCol() - 1)];
+                int arrIndex = 0;
+                for (int row = 0; row < this->getRow(); row++) {
+                    for (int col = 0; col < this->getCol(); col++) {
+                        if (row != i && col != j)
+                        {
+                            arr[arrIndex] = this->arr[toIndex(row, col)];
+                            arrIndex++;
+                        }
+                    }
+                }
+                Matrix n = Matrix(this->getRow() - 1, this->getCol() - 1, arr);
+                delete[] arr;
+                m.arr[toIndex(i, j)] = pow(-1, i + j) * n.determinant();
+            }
+        }
+
+        //Transpose Matrix m
+
+        m = m * (1 / determinant);
+
+        return m;
+    }
+}
 
 bool Matrix::operator==(Matrix &m) const
 {

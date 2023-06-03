@@ -191,6 +191,8 @@ int main()
 
     cout << test8.determinant() << endl;
 
+    cout << lineBreak << endl;
+
     return 0;
 
 }
