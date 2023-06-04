@@ -43,7 +43,6 @@ public:
     //matrix operations
     Matrix operator+(Matrix &m) const;
     Matrix operator*(Matrix &m) const; //matrix mult
-    Matrix inefficientMatrixMult(Matrix &m) const; //inefficient matrix mult for testing purposes
     Matrix operator*(double a) const;
 
     Matrix rref();
