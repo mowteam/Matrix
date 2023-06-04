@@ -1,6 +1,7 @@
 //
 // Created by Will Rosenberg on 1/1/23.
 //
+#pragma once
 
 #include <iostream>
 
