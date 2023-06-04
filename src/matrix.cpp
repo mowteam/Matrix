@@ -286,7 +286,7 @@ double Matrix::determinant() const
     if ( m.getRow() != m.getCol() )
     {
         cout << "Determinant is undefined";
-        return -1;//Change this to some null value
+        throw exception(invalid_argument("Determinant is undefined."));//Change this to some null value
     }
     else
     {
@@ -331,8 +331,7 @@ Matrix Matrix::inverse() const
     Matrix m = Matrix(this->row, this->col);
     if (this->determinant() == 0)
     {
-        cout << "Inverse is undefined." << endl;
-        return m;
+        throw exception(invalid_argument("Inverse does not exist.");
     }
     else
     {
