@@ -354,8 +354,7 @@ Matrix Matrix::inverse() const
     double determinant = this->determinant(); //exception from determinant will be thrown for non-square matrices
     if (determinant == 0)
     {
-        cout << "Inverse does not exist." << endl;
-        return m;
+        throw exception(invalid_argument("Uninvertable Matrix."));
     }
     else
     {
