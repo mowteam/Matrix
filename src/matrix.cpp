@@ -369,8 +369,7 @@ Matrix Matrix::inverse() const
             }
         }
 
-        //Transpose Matrix m
-
+        m = m.transpose();
         m = m * (1 / determinant);
 
         return m;
