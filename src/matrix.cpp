@@ -28,22 +28,26 @@ Matrix::Matrix(int row1, int col1, double * inputArr): row(row1), col(col1), arr
     }
 }
 
-Matrix::Matrix(const Matrix & m):row(m.row), col(m.col), arr(nullptr){
+Matrix::Matrix(const Matrix & m):row(m.row), col(m.col), arr(nullptr)
+{
     arr = new double[row * col];
     for(int i = 0; i < row * col; ++i){
         arr[i] = m.arr[i];
     }
 }
 
-Matrix::Matrix(Matrix && m):row(m.row), col(m.col), arr(m.arr){
+Matrix::Matrix(Matrix && m):row(m.row), col(m.col), arr(m.arr)
+{
     m.arr = nullptr;
     m.row = 0;
     m.col = 0;
 }
 
 
-Matrix & Matrix::operator=(const Matrix & m){
-    if(&m != this){
+Matrix & Matrix::operator=(const Matrix & m)
+{
+    if(&m != this)
+    {
         Matrix temp(m);
         swap(temp.row, row);
         swap(temp.col, col);
@@ -52,8 +56,10 @@ Matrix & Matrix::operator=(const Matrix & m){
     return *this; //destructor for temp will clean up resources
 }
 
-Matrix & Matrix::operator=(Matrix && m){
-    if(&m != this){
+Matrix & Matrix::operator=(Matrix && m)
+{
+    if(&m != this)
+    {
         delete [] arr;
         row = m.row;
         col = m.col;
@@ -67,13 +73,15 @@ Matrix & Matrix::operator=(Matrix && m){
     return *this;
 }
 
-Matrix::~Matrix(){
+Matrix::~Matrix()
+{
     delete[] arr;
 }
 
 
 
-Matrix Matrix::createMatrix(int row, int col){
+Matrix Matrix::createMatrix(int row, int col)
+{
 	Matrix m = Matrix(row, col);
 	string line;
 	stringstream iss;
@@ -270,10 +278,13 @@ void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
     }
 }
 
-Matrix Matrix::transpose() const{
+Matrix Matrix::transpose() const
+{
 	Matrix n = Matrix(col, row); //switch row and col
-	for(int i = 0; i < row; ++i){
-		for(int j = 0; j < col; ++j){
+	for(int i = 0; i < row; ++i)
+    {
+		for(int j = 0; j < col; ++j)
+        {
 			n.arr[n.toIndex(j, i)] = arr[toIndex(i, j)];
 		}
 	}
@@ -385,7 +396,8 @@ bool Matrix::operator==(Matrix &m) const
 
 	for(int i = 0; i < getSize(); ++i)
     {
-		if(arr[i] != m.arr[i]){
+		if(arr[i] != m.arr[i])
+        {
 			return false;
 		}
 	}
@@ -412,9 +424,7 @@ Matrix Matrix::operator+(Matrix &m) const
     }
     else
     {
-        cout << "invalid dimensions for addition operation" << endl;
-        Matrix nullMatrix = Matrix(m.row, m.col);
-        return nullMatrix;
+        throw exception(invalid_argument("Invalid arguments for addition."));
     }
 }
 
@@ -509,9 +519,11 @@ Matrix Matrix::inefficientMatrixMult(Matrix &m) const
 }
 
 //scalar multiply
-Matrix Matrix::operator*(double a) const{
+Matrix Matrix::operator*(double a) const
+{
     Matrix n = *this;
-    for(int i = 0; i < getSize(); ++i){
+    for(int i = 0; i < getSize(); ++i)
+    {
         n.arr[i] *= a;
     }
 
@@ -519,9 +531,11 @@ Matrix Matrix::operator*(double a) const{
 }
 
 //scalar multiply
-Matrix operator* (double a, const Matrix& m){
+Matrix operator* (double a, const Matrix& m)
+{
     Matrix n = m;
-    for(int i = 0; i < m.getSize(); ++i){
+    for(int i = 0; i < m.getSize(); ++i)
+    {
         n.getArr()[i] *= a;
     }
 
@@ -529,7 +543,8 @@ Matrix operator* (double a, const Matrix& m){
 }
 
 
-ostream& operator<< (ostream& o, const Matrix& m){
+ostream& operator<< (ostream& o, const Matrix& m)
+{
     for(int i = 0; i < m.row; ++i)
     {
         for(int j = 0; j < m.col; ++j)
