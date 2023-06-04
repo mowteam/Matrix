@@ -329,14 +329,13 @@ double Matrix::detHelper(Matrix m) const
 Matrix Matrix::inverse() const
 {
     Matrix m = Matrix(this->row, this->col);
-    if (this->determinant() == 0)
+    double determinant = this->determinant();
+    if (determinant == 0)
     {
         throw exception(invalid_argument("Inverse does not exist.");
     }
     else
     {
-        double determinant = this->determinant();
-
         //Constructing the adjunct matrix
         for (int i = 0; i < this->getRow(); ++i)
         {
