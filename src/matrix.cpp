@@ -285,7 +285,6 @@ double Matrix::determinant() const
     Matrix m = *this;
     if ( m.getRow() != m.getCol() )
     {
-        cout << "Determinant is undefined";
         throw exception(invalid_argument("Determinant is undefined."));//Change this to some null value
     }
     else
