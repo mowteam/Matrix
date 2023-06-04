@@ -270,6 +270,18 @@ void Matrix::rrefHelper(Matrix & A, int row_m, int row_n)
     }
 }
 
+Matrix Matrix::transpose() const{
+	Matrix n = Matrix(col, row); //switch row and col
+	for(int i = 0; i < row; ++i){
+		for(int j = 0; j < col; ++j){
+			n.arr[n.toIndex(j, i)] = arr[toIndex(i, j)];
+		}
+	}
+
+	return n;
+}
+
+
 int Matrix::gcdRowOperation(const Matrix A, int row)
 {
     int result = A.arr[A.toIndex(row, 0)];
@@ -328,10 +340,10 @@ double Matrix::detHelper(Matrix m) const
 Matrix Matrix::inverse() const
 {
     Matrix m = Matrix(this->row, this->col);
-    double determinant = this->determinant();
+    double determinant = this->determinant(); //exception from determinant will be thrown for non-square matrices
     if (determinant == 0)
     {
-        throw exception(invalid_argument("Inverse does not exist.");
+        return nullptr;
     }
     else
     {

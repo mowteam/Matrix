@@ -48,7 +48,7 @@ public:
 
     Matrix rref();
     Matrix rrefComplete();
-    //Matrix transpose(Matrix &m) const;
+    Matrix transpose() const;
     double determinant() const;
     Matrix inverse() const;
     void printMatrix() const;
