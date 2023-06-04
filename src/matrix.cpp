@@ -384,6 +384,14 @@ Matrix Matrix::inverse() const
         m = m.transpose();
         m = m * (1 / determinant);
 
+        //Getting rid of issue with negative zero values
+        for (int i = 0; i < m.getSize(); ++i)
+        {
+            if (m.arr[i] == 0)
+            {
+                m.arr[i] = 0;
+            }
+        }
         return m;
     }
 }
